@@ -1,0 +1,277 @@
+﻿@using ThiChungChiModels
+@model ThiChungChiModels.CuocThi
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Tạo cuộc thi</h1>
+<style>
+    .row.data {
+        padding-top: 5px;
+    }
+    #id_chung_chi {
+        margin-left: 40px;
+    }
+</style>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (ViewBag.CuocThi != null)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.id_cha, "Cuộc thi cấp cha", htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.id_cha,
+                    (List<SelectListItem>)ViewBag.CuocThi, "--- Chọn danh mục ---", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.id_cha, "", new { @class = "text-danger" })
+            </div>
+        }
+        <div class="form-group">
+            <label asp-for="ten" class="control-label"></label>
+            <input asp-for="ten" class="form-control" />
+            <span asp-validation-for="ten" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="pass_thi" class="control-label"></label>
+            <input asp-for="pass_thi" class="form-control" />
+            <span asp-validation-for="pass_thi" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ngay_bat_dau" class="control-label"></label>
+            <input name="ngay_bd" autocomplete="off" class="form-control datepicker" />
+            <input id="ngay_bat_dau" name="ngay_bat_dau" hidden="hidden" class="form-control" />
+            <span asp-validation-for="ngay_bat_dau" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ngay_ket_thuc" class="control-label"></label>
+            <input name="ngay_kt" autocomplete="off" class="form-control datepicker" />
+            <input id="ngay_ket_thuc" name="ngay_ket_thuc" hidden="hidden" class="form-control" />
+            <span asp-validation-for="ngay_ket_thuc" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="loai_cuoc_thi" class="control-label"></label>
+            <select class="form-control" id="loai_cuoc_thi" name="loai_cuoc_thi" asp-items="Html.GetEnumSelectList<LoaiCuocThi>()">
+                <option selected="selected" value="-1">---Chọn loại cuộc thi---</option>
+            </select>
+        </div>
+        @if (ViewBag.de_thi != null)
+        {
+            <div id="group_de_thi" class="form-group d-none">
+                @Html.LabelFor(model => model.id_de_thi, "Đề thi", htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.id_de_thi,
+                    (List<SelectListItem>)ViewBag.de_thi, "--- Chọn đề thi ---", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.id_de_thi, "", new { @class = "text-danger" })
+            </div>
+        }
+    </div>
+    <div class="col-md-6">
+        <label asp-for="thuoc_tinh " class="control-label"></label>
+        @Html.Raw(ViewBag.thuoc_tinh)
+        <hr />
+        <div class="row">
+            @if (ViewBag.chung_chi != null)
+            {
+                <div class="form-group col-md-11">
+                    @Html.LabelFor(model => model.id_chung_chi, "Chọn chứng chỉ", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.id_chung_chi,
+                        (List<SelectListItem>)ViewBag.chung_chi, "--- Chọn chứng chỉ ---", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.id_chung_chi, "", new { @class = "text-danger" })
+                </div>
+            }
+            <div class="form-group col-md-11">
+                <label class="control-label">Số lần thi</label>
+                <input class="form-control" type="number" id="so_lan_thi_lai" name="so_lan_thi_lai" value="1" style="margin-left: 40px"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label">Nội dung, ghi chú cuộc thi</label>
+                <textarea id="noi_dung" class="form-control" rows="4" style="margin-left: 40px"></textarea>
+            </div>
+
+        </div>
+    </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label font-weight-bold">Cấu hình cuộc thi</label>
+                <div class="row">
+                    <div class="col-md-3"><label class="control-label">Hạng</label></div>
+                    <div class="col-md-2"><label class="control-label">Min</label></div>
+                    <div class="col-md-2"><label class="control-label">Max</label></div>
+                    <div class="col-md-3"><label class="control-label">Kiểu kết quả</label></div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="kieu_ket_qua">
+                    <div class="row data">
+                        <div class="col-md-3 add_ten">
+                            <input class="form-control" type="text" name="name" value="" />
+                        </div>
+                        <div class="col-md-2 add_min">
+                            <input class="form-control" type="number" name="min" value="" />
+                        </div>
+                        <div class="col-md-2 add_max">
+                            <input class="form-control" type="number" name="max" value="" />
+                        </div>
+                        <div class="col-md-3 add_kieu">
+                            <select class="form-control" name="kieu_du_lieu">
+                                <option selected="selected" value="-1">---Chọn---</option>
+                                <option value="0">Số chẵn</option>
+                                <option value="1">Số lẻ</option>
+                                <option value="2">Bool</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2"><button class="btn btn-danger remove_row">Xóa</button></div>
+                    </div>
+                </div>
+                <br />
+                <input type="button" value="Thêm một hàng" id="add_row" class="btn btn-light float-right" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo" id="luu_kq" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        CKEDITOR.replace('noi_dung');
+        $("#add_row").click(function () {
+            $(".kieu_ket_qua").append(`<div class="row data">
+                                        <div class="col-md-3 add_ten">
+                                            <input class="form-control" type="text" name="name" value="" />
+                                        </div>
+                                        <div class="col-md-2 add_min">
+                                            <input class="form-control" type="number" name="min" value="" />
+                                        </div>
+                                        <div class="col-md-2 add_max">
+                                            <input class="form-control" type="number" name="max" value="" />
+                                        </div>
+                                        <div class="col-md-3 add_kieu">
+                                            <select class="form-control" name="kieu_du_lieu">
+                                                <option selected="selected" value="-1">---Chọn---</option>
+                                                <option value="0">Số chẵn</option>
+                                                <option value="1">Số lẻ</option>
+                                                <option value="2">Bool</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2"><button class="btn btn-danger remove_row">Xóa</button></div><br />
+                                    </div>`);
+        });
+
+        $("#luu_kq").click(function () {
+            getData();
+        });
+
+        $('.kieu_ket_qua').on('click', '.remove_row', function () {
+            $(this).closest(".data").remove();
+        });
+        function getData() {
+            let id_cha = $("#id_cha").val();
+            let ten = $("#ten").val();
+            let pass = $("#pass_thi").val();
+            let ngay_bat_dau = $("#ngay_bat_dau").val();
+            let ngay_ket_thuc = $("#ngay_ket_thuc").val();
+            let loai_cuoc_thi = $("#loai_cuoc_thi").val();
+            let de_thi = $("#id_de_thi").val();
+            let so_lan_thi_lai = $("#so_lan_thi_lai").val();
+            let thuoc_tinh = [], kieu_ket_qua = [];
+            let chung_chi = $("#id_chung_chi").val();
+            let noi_dung = CKEDITOR.instances['noi_dung'].getData();
+            $("input[name^='thuoc_tinh']:checked").each(function (el) {
+                try {
+                    thuoc_tinh.push(parseInt($(this).val()));
+                } catch (e) {
+                }
+            });
+            $('.kieu_ket_qua > div').each(function () {
+                let name = $("input[name='name']", this).val();
+                let min = $("input[name='min']", this).val();
+                let max = $("input[name='max']", this).val();
+                let kieu_du_lieu = $("select[name='kieu_du_lieu']", this).val();
+                kieu_ket_qua.push(
+                    { 'ten': name, 'min': min, 'max': max, 'kieu_du_lieu': kieu_du_lieu }
+                );
+            });
+
+            var obj = {
+                "id_cha": id_cha,
+                "ten": ten,
+                "pass_thi": pass,
+                "ngay_bat_dau": ngay_bat_dau,
+                "ngay_ket_thuc": ngay_ket_thuc,
+                "loai_cuoc_thi": loai_cuoc_thi,
+                "id_de_thi": de_thi,
+                "thuoc_tinh": thuoc_tinh,
+                "kieu_ket_qua": kieu_ket_qua,
+                "so_lan_thi_lai": so_lan_thi_lai,
+                "id_chung_chi": chung_chi,
+                "noi_dung": noi_dung
+            };
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                contentType: 'application/json; charset=urf=8',
+                url: '/cuocthi/create',
+                data: JSON.stringify(obj)
+            }).done(function (res) {
+                if (res.success) {
+                    $.notify(`${res.msg}`, "success");
+                } else {
+                    $.notify(`${res.msg}`, "error");
+                }
+            });
+        }
+
+        $('[name="ngay_bd"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function () {
+                try {
+                    $('[name="ngay_bd"]').datepicker('setEndDate', $('[name="ngay_kt"]').val());
+                } catch (e) {
+
+                }
+            }).on('hide',
+                function (e) {
+                    if (e.dates.length > 0) {
+                        $("#ngay_bat_dau").val(e.date.getTime() / 1000);
+                    } else {
+                        $("#ngay_bat_dau").val(0);
+                    }
+                });
+        $('[name="ngay_kt"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function () {
+                try {
+                    $('[name="ngay_kt"]').datepicker('setStartDate', $('[name="ngay_bd"]').val());
+                } catch (e) {
+
+                }
+
+            }).on('hide',
+                function (e) {
+                    if (e.dates.length > 0) {
+                        $("#ngay_ket_thuc").val(e.date.getTime() / 1000);
+                    } else {
+                        $("#ngay_ket_thuc").val(0);
+                    }
+                });
+        $("#loai_cuoc_thi").change(function () {
+            if ($(this).val() === "0") {
+                $("#group_de_thi").removeClass('d-none');
+            } else {
+                $("#group_de_thi").addClass('d-none');
+            }
+        });
+    </script>
+}

@@ -1,0 +1,73 @@
+﻿@model ThiChungChiModels.CuocThi
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chi tiết cuộc thi: @Model.ten</h1>
+
+<div>
+    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_cha)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_cha)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ten)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ten)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.pass_thi)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.pass_thi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_bat_dau)
+        </dt>
+        <dd class = "col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_bat_dau)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_ket_thuc)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_ket_thuc)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_tao)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_tao)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_sua)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_sua)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.nguoi_tao)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.nguoi_tao)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.nguoi_sua)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.nguoi_sua)
+        </dd>
+    </dl>
+</div>
+<div>
+    @*@Html.ActionLink("Sửa", "Edit", new {  id = Model.id  }) |*@
+    <a asp-action="Index">Quay lại</a>
+</div>

@@ -1,0 +1,545 @@
+﻿@using ThiChungChiModels
+@model ThiChungChiModels.CuocThi
+
+@{
+    ViewData["Title"] = "Sửa cuộc thi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var ngay_bd = ViewBag.ngay_bd > 0 ? ViewBag.ngay_bd : 0;
+    var ngay_kt = ViewBag.ngay_kt > 0 ? ViewBag.ngay_kt : 0;
+}
+<style>
+    .row.data {
+        padding-top: 5px;
+    }
+
+    #id_chung_chi {
+        margin-left: 40px;
+    }
+</style>
+<h1>Sửa cuộc thi</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (ViewBag.CuocThi != null)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.id_cha, "Cuộc thi cấp cha", htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.id_cha,
+                    (List<SelectListItem>)ViewBag.CuocThi, "--- Chọn cuộc thi cha ---", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.id_cha, "", new { @class = "text-danger" })
+            </div>
+        }
+        <div class="form-group">
+            <label asp-for="ten" class="control-label"></label>
+            <input asp-for="ten" class="form-control" />
+            <span asp-validation-for="ten" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="pass_thi" class="control-label"></label>
+            <input asp-for="pass_thi" class="form-control" />
+            <span asp-validation-for="pass_thi" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ngay_bat_dau" class="control-label"></label>
+            <input name="ngay_bd" class="form-control datepicker" />
+            <input id="ngay_bat_dau" name="ngay_bat_dau" class="form-control d-none" />
+            <span asp-validation-for="ngay_bat_dau" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ngay_ket_thuc" class="control-label"></label>
+            <input name="ngay_kt" class="form-control datepicker" />
+            <input id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control d-none" />
+            <span asp-validation-for="ngay_ket_thuc" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="loai_cuoc_thi" class="control-label"></label>
+            <select class="form-control" asp-for="loai_cuoc_thi" id="loai_cuoc_thi" name="loai_cuoc_thi" asp-items="Html.GetEnumSelectList<LoaiCuocThi>()">
+                <option selected="selected" value="-1">---Chọn loại cuộc thi---</option>
+            </select>
+        </div>
+        @if (ViewBag.de_thi != null)
+        {
+            <div id="group_de_thi" class="form-group">
+                @Html.LabelFor(model => model.id_de_thi, "Đề thi", htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.id_de_thi,
+                    (List<SelectListItem>)ViewBag.de_thi, "--- Chọn đề thi ---", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.id_de_thi, "", new { @class = "text-danger" })
+            </div>
+        }
+    </div>
+    <div class="col-md-6">
+        <label class="control-label" style="text-indent: 40px;">Tài khoản đã chọn</label>
+        <div class="form-group old">
+            <ul style="padding-left: 40px;" class="list_account_checked list-group">
+            </ul>
+        </div>
+        <div style="text-indent: 40px;">
+            <button type="button" class="btn btn-dark" data-toggle="modal" data-target=".bd-example-modal-lg">Sửa tài khoản thi</button>
+        </div>
+
+        <hr />
+        <label asp-for="thuoc_tinh" class="control-label" style="text-indent: 40px;"></label>
+        @Html.Raw(ViewBag.thuoc_tinh)
+        <hr />
+        <div class="row">
+            @if (ViewBag.chung_chi != null)
+            {
+                <div class="form-group col-md-11">
+                    @Html.LabelFor(model => model.id_chung_chi, "Chọn chứng chỉ", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.id_chung_chi,
+                        (List<SelectListItem>)ViewBag.chung_chi, "--- Chọn chứng chỉ ---", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.id_chung_chi, "", new { @class = "text-danger" })
+                </div>
+            }
+            <div class="form-group col-md-11">
+                <label class="control-label">Số lần thi</label>
+                <input class="form-control" type="number" id="so_lan_thi_lai" name="so_lan_thi_lai" value="@Model.so_lan_thi_lai" style="margin-left: 40px" />
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label">Nội dung, ghi chú cuộc thi</label>
+                <textarea id="noi_dung" class="form-control" rows="4" style="margin-left: 40px">@Model.noi_dung</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label font-weight-bold">Cấu hình cuộc thi</label>
+            <div class="row">
+                <div class="col-md-3"><label class="control-label">Hạng</label></div>
+                <div class="col-md-2"><label class="control-label">Min</label></div>
+                <div class="col-md-2"><label class="control-label">Max</label></div>
+                <div class="col-md-3"><label class="control-label">Kiểu kết quả</label></div>
+                <div class="col-md-2"></div>
+            </div>
+            @{
+                var data = Model.kieu_ket_qua;
+            }
+            <div class="kieu_ket_qua">
+                @if (Model.kieu_ket_qua.Count > 0)
+                {
+                    foreach (var t in Model.kieu_ket_qua)
+                    {
+                        <div class="row data">
+                            <div class="col-md-3 add_ten">
+                                <input class="form-control" type="text" name="name" value="@t.ten" />
+                                @*@Html.TextBoxFor(m => Model.kieu_ket_qua[i].ten, new { @class = "form-control" })*@
+                            </div>
+                            <div class="col-md-2 add_min">
+                                <input class="form-control" type="number" name="min" value="@t.min" />
+                                @*@Html.TextBoxFor(m => Model.kieu_ket_qua[i].min, new { @class = "form-control" })*@
+                            </div>
+                            <div class="col-md-2 add_max">
+                                <input class="form-control" type="number" name="max" value="@t.max" />
+                                @*@Html.TextBoxFor(m => Model.kieu_ket_qua[i].max, new { @class = "form-control" })*@
+                            </div>
+                            <div class="col-md-3 add_kieu">
+                                <select asp-for="@t.kieu_du_lieu" class="form-control" name="kieu_du_lieu">
+                                    <option selected="selected" value="-1">---Chọn---</option>
+                                    <option value="0">Số chẵn</option>
+                                    <option value="1">Số lẻ</option>
+                                    <option value="2">Bool</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2"><button class="btn btn-danger remove_row">Xóa</button></div>
+                        </div>
+                    }
+                }
+            </div>
+            <br />
+            <input type="button" value="Thêm một hàng" id="add_row" class="btn btn-light float-right" />
+        </div>
+        <div class="form-group">
+
+            <input type="button" value="Lưu" onclick="saveData(event)" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+<div>
+    @ViewBag.msg
+    <a asp-action="Index">Quay lại</a>
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="container my-4">
+                <p class="font-weight-bold">Chọn tài khoản </p>
+                <div class="row">
+                    <div class="col-xl-12 mb-10 mb-xl-0">
+                        <section>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item waves-effect waves-light">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#acc" role="tab" aria-controls="home" aria-selected="false">Danh sách tài khoản</a>
+                                </li>
+                                <li class="nav-item waves-effect waves-light">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#choosed" role="tab" aria-controls="profile" aria-selected="false">Đã chọn <span id="total"></span></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade active show" id="acc" role="tabpanel" aria-labelledby="home-tab">
+                                    <br />
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="term" value="" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-primary" onclick="getData(1)">Tìm tài khoản</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="data_tai_khoan">
+                                    </div>
+                                    <div id="paging">
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="choosed" role="tabpanel" aria-labelledby="profile-tab">
+                                    <br><h4>Danh sách tài khoản đã chọn</h4>
+                                    <ul class="list_account_checked list-group">
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        CKEDITOR.replace('noi_dung');
+        $("#add_row").click(function() {
+            $(".kieu_ket_qua").append(`<div class="row data">
+                                    <div class="col-md-3 add_ten">
+                                        <input class="form-control" type="text" name="name" value="" />
+                                    </div>
+                                    <div class="col-md-2 add_min">
+                                        <input class="form-control" type="number" name="min" value="" />
+                                    </div>
+                                    <div class="col-md-2 add_max">
+                                        <input class="form-control" type="number" name="max" value="" />
+                                    </div>
+                                    <div class="col-md-3 add_kieu">
+                                        <select class="form-control" name="kieu_du_lieu">
+                                            <option selected="selected" value="-1">---Chọn---</option>
+                                            <option value="0">Số chẵn</option>
+                                            <option value="1">Số lẻ</option>
+                                            <option value="2">Bool</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2"><button class="btn btn-danger remove_row">Xóa</button></div><br />
+                                </div>`);
+        });
+
+        $('.kieu_ket_qua').on('click',
+            '.remove_row',
+            function() {
+                $(this).closest(".data").remove();
+            });
+
+        function saveData(event) {
+            event.preventDefault();
+            let id_cha = $("#id_cha").val();
+            let ten = $("#ten").val();
+            let pass = $("#pass_thi").val();
+            let ngay_bat_dau = $("#ngay_bat_dau").val();
+            let ngay_ket_thuc = $("#ngay_ket_thuc").val();
+            let loai_cuoc_thi = $("#loai_cuoc_thi").val();
+            let de_thi = $("#id_de_thi").val();
+            let so_lan_thi_lai = $("#so_lan_thi_lai").val();
+            let thuoc_tinh = [], kieu_ket_qua = [], list_tai_khoan_need = [];
+            let chung_chi = $("#id_chung_chi").val();
+            //let noi_dung = $("#noi_dung").val();
+            let noi_dung = CKEDITOR.instances['noi_dung'].getData();
+            $("input[name^='thuoc_tinh']:checked").each(function(el) {
+                try {
+                    thuoc_tinh.push(parseInt($(this).val()));
+                } catch (e) {
+                }
+            });
+            $('.kieu_ket_qua > div').each(function() {
+                let name = $("input[name='name']", this).val();
+                let min = $("input[name='min']", this).val();
+                let max = $("input[name='max']", this).val();
+                let kieu_du_lieu = $("select[name='kieu_du_lieu']", this).val();
+                kieu_ket_qua.push(
+                    { 'ten': name, 'min': min, 'max': max, 'kieu_du_lieu': kieu_du_lieu }
+                );
+            });
+            $('.old .list_account_checked > li').each(function() {
+                let tai_khoan = $("input[name='list_tai_khoan_need']", this).val();
+                list_tai_khoan_need.push(tai_khoan);
+            });
+
+            var obj = {
+                "id_cha": id_cha,
+                "ten": ten,
+                "pass_thi": pass,
+                "ngay_bat_dau": ngay_bat_dau,
+                "ngay_ket_thuc": ngay_ket_thuc,
+                "loai_cuoc_thi": loai_cuoc_thi,
+                "id_de_thi": de_thi,
+                "thuoc_tinh": thuoc_tinh,
+                "kieu_ket_qua": kieu_ket_qua,
+                'list_tai_khoan_need': list_tai_khoan_need,
+                "so_lan_thi_lai": so_lan_thi_lai,
+                "id_chung_chi": chung_chi,
+                "noi_dung": noi_dung
+            };
+            var id = '@Model.id';
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                contentType: 'application/json; charset=urf=8',
+                url: `/cuocthi/edit/${id}`,
+                data: JSON.stringify(obj)
+            }).done(function (res) {
+                //window.location.href = res.newUrl;
+                if (res.success) {
+                    $.notify(`${res.msg}`, "success");
+                } else {
+                    $.notify(`${res.msg}`, "error");
+                }
+            });;
+
+        };
+        //function getData() {
+
+        //    let id_cha = $("#id_cha").val();
+        //    let ten = $("#ten").val();
+        //    let pass = $("#pass_thi").val();
+        //    let ngay_bat_dau = $("#ngay_bat_dau").val();
+        //    let ngay_ket_thuc = $("#ngay_ket_thuc").val();
+        //    let loai_cuoc_thi = $("#loai_cuoc_thi").val();
+        //    let de_thi = $("#id_de_thi").val();
+        //    let thuoc_tinh = [], kieu_ket_qua = [], list_tai_khoan_need = [];
+        //    $("input[name^='thuoc_tinh']:checked").each(function (el) {
+        //        try {
+        //            thuoc_tinh.push(parseInt($(this).val()));
+        //        } catch (e) {
+        //        }
+        //    });
+        //    $('.kieu_ket_qua > div').each(function () {
+        //        let name = $("input[name='name']", this).val();
+        //        let min = $("input[name='min']", this).val();
+        //        let max = $("input[name='max']", this).val();
+        //        let kieu_du_lieu = $("select[name='kieu_du_lieu']", this).val();
+        //        kieu_ket_qua.push(
+        //            { 'ten': name, 'min': min, 'max': max, 'kieu_du_lieu': kieu_du_lieu }
+        //        );
+        //    });
+        //    $('.old .list_account_checked > li').each(function () {
+        //        let tai_khoan = $("input[name='list_tai_khoan_need']", this).val();
+        //        list_tai_khoan_need.push(
+        //            { tai_khoan }
+        //        );
+        //    });
+
+        //    var obj = {
+        //        "id_cha": id_cha,
+        //        "ten": ten,
+        //        "pass_thi": pass,
+        //        "ngay_bat_dau": ngay_bat_dau,
+        //        "ngay_ket_thuc": ngay_ket_thuc,
+        //        "loai_cuoc_thi": loai_cuoc_thi,
+        //        "id_de_thi": de_thi,
+        //        "thuoc_tinh": thuoc_tinh,
+        //        "kieu_ket_qua": kieu_ket_qua
+        //    };
+
+        //    $.ajax({
+        //        type: 'POST',
+        //        dataType: 'JSON',
+        //        contentType: 'application/json; charset=urf=8',
+        //        url: `/cuocthi/Edit/${list_tai_khoan_need}`,
+        //        data: JSON.stringify(obj),
+        //        success: function(data) {
+        //            //console.log(data);
+        //        },
+        //        error: function(err) {
+        //            //console.log(err);
+        //        }
+        //    });
+        //};
+        $('[name="ngay_bd"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function() {
+                try {
+                    $('[name="ngay_bd"]').datepicker('setEndDate', $('[name="ngay_kt"]').val());
+                } catch (e) {
+
+                }
+            }).on('hide',
+            function(e) {
+                if (e.dates.length > 0) {
+                    $("#ngay_bat_dau").val(e.date.getTime() / 1000);
+                } else {
+                    $("#ngay_bat_dau").val(0);
+                }
+            });
+        $('[name="ngay_kt"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function() {
+                try {
+                    $('[name="ngay_kt"]').datepicker('setStartDate', $('[name="ngay_bd"]').val());
+                } catch (e) {
+                }
+
+            }).on('hide',
+            function(e) {
+                if (e.dates.length > 0) {
+                    $("#ngay_ket_thuc").val(e.date.getTime() / 1000);
+                }else {
+                    $("#ngay_ket_thuc").val(0);
+                }
+            });
+
+        var tai_khoan_old = [];
+        $(document).ready(function() {
+
+            taiKhoanPre();
+            getData();
+            $('[name="ngay_bd"]').val(epochToTime(@ngay_bd));
+            $('[name="ngay_kt"]').val(epochToTime(@ngay_kt));
+            $('[name="ngay_bat_dau"]').val(@ngay_bd);
+            $('[name="ngay_ket_thuc"]').val(@ngay_kt);
+            $("#loai_cuoc_thi").val('@ViewBag.loai');
+
+            var array = @Html.Raw(Json.Serialize(ViewBag.tt));
+            for (var i = 0; i < array.length; i++) {
+                $(`input[name^='thuoc_tinh'][value='${array[i]}']`).prop('checked', true);
+            }
+        });
+
+        function getData(page) {
+            if (typeof page === 'undefined') {
+                page = 1;
+            }
+
+            var term = $("input[name='term']").val();
+            $("#data_tai_khoan .checkbox").remove();
+            $.ajax
+            ({
+                type: 'POST',
+                url: '@Url.Action("getTaiKhoan", "DanhSachThi")',
+                dataType: 'json',
+                data: {
+                    term: term,
+                    page: page
+                },
+                success: function(data) {
+                    data.data.forEach(x => {
+                        var rows = "<div class='checkbox'>" +
+                            "<label class='checkbox-bootstrap checkbox-lg max'>" +
+                            `<span class='checkbox-placeholder'></span>${x.fullname} (${x.username})` +
+                            `<input type='checkbox' data-user='${x.username}' data-name='${x.fullname}' id='${x.id
+                            }' onclick="taiKhoanChecked(this.id)" name='tai_khoan_check' value='${x.username}'>` +
+                            "</label>" +
+                            "</div>";
+                        $('#data_tai_khoan').append(rows);
+                    });
+                    var list_user = @Html.Raw(Json.Serialize(ViewBag.tk));
+
+                    list_user.forEach(function(el) {
+
+                        $(`input[name='tai_khoan_check'][value='${el}']`).prop('checked', true);
+
+                    });
+                    paging(data.total, 'getData', page, data.page_size);
+                },
+                error: function(ex) {
+                    alert("Message: " + ex);
+                }
+            });
+            return false;
+        }
+
+        function paging(total, func_name, page, page_size) {
+            if (total === 0) {
+                $('.paging').html('');
+                return;
+            }
+            let total_page = Math.ceil(total / page_size);
+            let ext_space = false;
+            let html_paging = `<div class="pagin"><ul class='number-page'>`;
+            if (page > 1)
+                html_paging += `<li onclick="${func_name}(${page - 1
+                    })"><a class="nb-txt nb-hover font-weight-bold page-current" href="#">«</a></li>`;
+            else
+                html_paging += `<li><a class="nb-txt nb-hover font-weight-bold page-current">«</a></li>`;
+            for (var i = 1; i <= total_page; i++) {
+                if (i > 2 && i < total_page - 1) {
+                    if (!ext_space) {
+                        ext_space = true;
+                        html_paging += `...`;
+                    }
+                } else {
+                    if (page === i) {
+                        html_paging += `<li class="current"><span class="font-weight-bold">${i}</span></li>`;
+                    } else {
+                        html_paging += `<li onclick="${func_name}(${i
+                            })"><a href="#" class="nb-txt nb-hover font-weight-bold page-current" data-href="${i}">${i
+                            }</a></li>`;
+                    }
+                }
+            }
+            if (page < total_page)
+                html_paging += `<li onclick="${func_name}(${page + 1
+                    })"><a class="nb-txt nb-hover font-weight-bold page-current" href="#">»</a></li>`;
+            else
+                html_paging += `<li><a class="nb-txt nb-hover font-weight-bold page-current">»</a></li>`;
+            html_paging += `</ul></div>`;
+            $('#paging').html(html_paging);
+        }
+
+        let id = '@ViewBag.id';
+
+        function taiKhoanPre() {
+            $.ajax
+            ({
+                type: 'POST',
+                url: '@Url.Action("getTaiKhoanByIdCuocThi", "DanhSachThi")',
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    data.data.forEach(x => {
+                        let input =
+                            `<input class='form-control d-none' readonly name='list_tai_khoan_need' value='${x
+                                .ten_tai_khoan}'>`;
+                        //let btn_close = `<button class='btn btn-danger float-right removeThis'>x</button>`;
+                        let row =
+                            `<li class='list-group-item' id="item_${x.ten_tai_khoan}">${input} ${x.fullname} (${x
+                                .ten_tai_khoan
+                                }) </li>`;
+                        $("ul.list_account_checked").append(row);
+                        $('.removeThis').click(function() {
+                            $(this).parent().remove();
+                        });
+                    });
+
+                },
+                error: function(ex) {
+                    alert("Message: " + ex);
+                }
+            });
+        }
+
+        $("#loai_cuoc_thi").change(function() {
+            if ($(this).val() === "0") {
+                $("#group_de_thi").removeClass('d-none');
+            } else {
+                $("#group_de_thi").addClass('d-none');
+            }
+        });
+    </script>
+    <script asp-append-version="true" src="~/js/danh_sach_thi.js"></script>
+}

@@ -1,0 +1,62 @@
+﻿@model ThiChungChiModels.TaiKhoanChungChi
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>TaiKhoanChungChi</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="id_tai_khoan" class="control-label"></label>
+                <input asp-for="id_tai_khoan" class="form-control" />
+                <span asp-validation-for="id_tai_khoan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_chung_chi" class="control-label"></label>
+                <input asp-for="id_chung_chi" class="form-control" />
+                <span asp-validation-for="id_chung_chi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_ket_qua_thi" class="control-label"></label>
+                <input asp-for="id_ket_qua_thi" class="form-control" />
+                <span asp-validation-for="id_ket_qua_thi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ngay_cap" class="control-label"></label>
+                <input asp-for="ngay_cap" class="form-control" />
+                <span asp-validation-for="ngay_cap" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="noi_dung" class="control-label"></label>
+                <input asp-for="noi_dung" class="form-control" />
+                <span asp-validation-for="noi_dung" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="dia_chi_nhan_offline" class="control-label"></label>
+                <input asp-for="dia_chi_nhan_offline" class="form-control" />
+                <span asp-validation-for="dia_chi_nhan_offline" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ngay_gui_offline" class="control-label"></label>
+                <input asp-for="ngay_gui_offline" class="form-control" />
+                <span asp-validation-for="ngay_gui_offline" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+

@@ -1,0 +1,93 @@
+﻿@using ThiChungChiModels
+@model IEnumerable<ThiChungChi.Models.KetQuaThiMap>
+@{
+    ViewData["Title"] = "KetQuaCuocThi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalItem = ViewBag.Total;
+    var d = 0;
+    var dt = 0;
+}
+
+<h3>Cuộc thi: @ViewBag.ten_cuoc_thi</h3>
+<div class="row">
+    <div class="col-md-6">
+        
+    </div>
+    <div class="col-md-6 text-right">
+        <p>Tổng số thí sinh: @ViewBag.dem_thi_sinh</p>
+        <p>Tổng số kết quả: @totalItem</p>
+    </div>
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            STT
+        </th>
+        @if (User.IsInRole(((int)(Role.ADMIN)).ToString()) || User.IsInRole(((int)(Role.CREATE)).ToString()))
+        {
+            <th>
+                Tài khoản
+            </th>
+        }
+        <th>
+            @Html.DisplayNameFor(model => model.ngay_thi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diem_thi)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null)
+    {
+        int count = 1;
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @count
+                </td>
+                @if (User.IsInRole(((int)(Role.ADMIN)).ToString()) || User.IsInRole(((int)(Role.CREATE)).ToString()))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.username)
+                    </td>
+                }
+                <td>
+                    @XMedia.XUtil.EpochToTimeStringShortFomart(item.ngay_thi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.diem_thi)
+                </td>
+               
+                <td>
+                    @if (User.IsInRole(((int)(Role.ADMIN)).ToString()) || User.IsInRole(((int)(Role.CREATE)).ToString()))
+                    {
+                        @Html.ActionLink("Sửa", "Edit", new { id = item.id }) <span>|</span>
+                    }
+                    @Html.ActionLink("Chi tiết", "Details", new { id = item.id })
+                    | @Html.ActionLink("Chứng chỉ", "TaiKhoanChungChi", new { id = item.id })
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+    
+@{
+    try
+    {
+        var term = ViewBag.Term as string;
+        var id_cuoc_thi = ViewBag.id_cuoc_thi as string;        
+        var ngay_thi_tu = d;
+        var ngay_thi_den = dt;
+        Html.RenderPartial("PagingWithDate", new { ngay_thi_tu, ngay_thi_den, term, id_cuoc_thi });
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+    }
+
+}

@@ -1,0 +1,157 @@
+﻿@model IEnumerable<ThiChungChi.Models.CCMap>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalItem = ViewBag.Total;
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h1>Danh sách chứng chỉ</h1>
+    </div>
+    <div class="col-md-6 text-right">
+        <p>
+            <a class="btn btn-dark" asp-action="Create">Tạo mới</a>
+        </p>
+    </div>
+</div>
+<form asp-action="Index">
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                <input placeholder="Tìm kiếm" name="term" value="@Html.Raw(System.Web.HttpUtility.HtmlDecode(ViewBag.Term))" class="form-control" />
+            </div>
+        </div>
+        <div class="col-sm-5">
+            @Html.Raw(ViewBag.thuoc_tinh_search)
+        </div>
+        <div class="col-sm-2">
+            <button id="btn_search" class="btn-size btn btn-primary">Tìm</button>
+        </div>
+    </div>
+</form>
+<p>Tổng số: @totalItem</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ten)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.mau_chung_chi)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.ngay_tao)
+            </th>
+            <th></th>
+        </ >
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ten)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.mau_chung_chi)
+                    </td>*@
+                    <td>
+                        @XMedia.XUtil.EpochToTimeStringShortFomart(item.ngay_tao)
+                    </td>
+                    @*<td>
+                        @if (item.thuoc_tinh != null)
+                        {
+                            foreach (var lst in item.thuoc_tinh)
+                            {
+                                <p>-- @lst.Value</p>
+                            }
+                        }
+                    </td>*@
+                    <td>
+                        @Html.ActionLink("Sửa", "Edit", new { id = item.id }) |
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.id }) |
+                        @*@Html.ActionLink("Xóa", "Delete", new { id = item.id })*@
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_rec_modal_@item.id">
+                            Xóa
+                        </button>
+                        <div class="modal fade" id="delete_rec_modal_@item.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <form asp-action="Delete" method="get" asp-route-id="@item.id">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-warning" id="exampleModalLabel">Thông báo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa chứng chỉ: <kbd>@item.ten</kbd>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                            <button type="submit" class="btn btn-primary">Đồng ý</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                    @*<td>
+                        <button class="btn btn-primary" data-toggle="modal" id="@item.id" onclick="showChungChi(this.id)" data-target="#thuoc_tinh_chung_chi">Đánh dấu</button>
+                    </td>*@
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="thuoc_tinh_chung_chi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="LuuChungChi">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Đánh dấu chứng chỉ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="chung_chi">
+                    <input type="hidden" class="form-control" id="id_obj" name="id_obj" value="" />
+                    @Html.Raw(ViewBag.thuoc_tinh)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script asp-append-version="true" src="~/js/chung_chi.js"></script>
+@{
+    var term = ViewBag.Term as string;
+    var loai = 0;
+    Html.RenderPartial("Paging", new { loai, term });
+}
+
+@section scripts {
+    <script>
+        function showChungChi(id) {
+            $("#id_obj").val(id);
+        }
+        $(document).ready(function() {
+            var array = @Html.Raw(Json.Serialize(ViewBag.tt));
+            for (var i = 0; i < array.length; i++) {
+                $(`input[name^='thuoc_tinh'][value='${array[i]}']`).prop('checked', true);
+            }
+
+            //$(`input[name^='thuoc_tinh'][value='ViewBag.tt']`).prop('checked', true);
+        })
+    </script>
+}

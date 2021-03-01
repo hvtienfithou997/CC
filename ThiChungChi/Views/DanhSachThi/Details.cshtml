@@ -1,0 +1,54 @@
+﻿@model ThiChungChiModels.DanhSachThi
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    
+    
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.id_cuoc_thi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.id_cuoc_thi)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.id_tai_khoan)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.id_tai_khoan)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_tao)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_tao)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_sua)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_sua)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.nguoi_tao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.nguoi_tao)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.nguoi_sua)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.nguoi_sua)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>

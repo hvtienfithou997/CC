@@ -1,0 +1,161 @@
+﻿@{
+    ViewData["Title"] = "Thêm ứng viên vào cuộc thi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Thêm ứng viên vào cuộc thi: <u>@ViewBag.ten</u></h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="term" value="" />
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" onclick="getData(1)">Tìm tài khoản</button>
+            </div>
+        </div>
+        <h4>Danh sách ứng viên</h4>
+        <div id="data_tai_khoan">
+        </div>
+        <div id="paging">
+        </div>
+    </div>
+    <div class="col-md-5">
+        <h4>Ứng viên đã có trong danh sách</h4>
+        <form asp-action="GanUngVien" asp-route-id="@ViewBag.id">
+            <ul class="list_account_checked list-group">
+            </ul>
+            <br />
+        <div class="form-group text-right">
+            <input type="submit" value="Lưu" class="btn btn-primary btn-width" />
+        </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script asp-append-version="true" src="~/js/danh_sach_thi.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            taiKhoanPre();
+            getData();
+        });
+
+        function getData(page) {
+            if (typeof page === 'undefined') {
+                page = 1;
+            }
+
+            var term = $("input[name='term']").val();
+            $("#data_tai_khoan .checkbox").remove();
+            $.ajax
+            ({
+                type: 'POST',
+                url: '@Url.Action("getTaiKhoan", "DanhSachThi")',
+                dataType: 'json',
+                data: {
+                    term: term,
+                    page: page
+                },
+                success: function(data) {
+                    data.data.forEach(x => {
+                        var rows = "<div class='checkbox'>" +
+                            "<label class='checkbox-bootstrap checkbox-lg max'>" +
+                            `<span class='checkbox-placeholder'></span>${x.fullname} (${x.username})` +
+                            `<input type='checkbox' data-user='${x.username}' data-name='${x.fullname}' id='${x.id
+                            }' onclick="taiKhoanChecked(this.id)" name='tai_khoan_check' value='${x.username}'>` +
+                            "</label>" +
+                            "</div>";
+                        $('#data_tai_khoan').append(rows);
+                    });
+                    var list_user = @Html.Raw(Json.Serialize(ViewBag.tk));
+
+                    list_user.forEach(function(el) {
+
+                        $(`input[name='tai_khoan_check'][value='${el}']`).prop('checked', true);
+
+                    });
+                    paging(data.total, 'getData', page, data.page_size);
+                },
+                error: function(ex) {
+                    alert("Message: " + ex);
+                }
+            });
+            return false;
+        }
+        function paging(total, func_name, page, page_size) {
+            if (total === 0) {
+                $('.paging').html('');
+                return;
+            }
+            let total_page = Math.ceil(total / page_size);
+            let ext_space = false;
+            let html_paging = `<div class="pagin"><ul class='number-page'>`;
+            if (page > 1)
+                html_paging += `<li onclick="${func_name}(${page - 1
+                    })"><a class="nb-txt nb-hover font-weight-bold page-current" href="#">«</a></li>`;
+            else
+                html_paging += `<li><a class="nb-txt nb-hover font-weight-bold page-current">«</a></li>`;
+            for (var i = 1; i <= total_page; i++) {
+                if (i > 2 && i < total_page - 1) {
+                    if (!ext_space) {
+                        ext_space = true;
+                        html_paging += `...`;
+                    }
+                } else {
+                    if (page === i) {
+                        html_paging += `<li class="current"><span class="font-weight-bold">${i}</span></li>`;
+                    } else {
+                        html_paging += `<li onclick="${func_name}(${i
+                            })"><a href="#" class="nb-txt nb-hover font-weight-bold page-current" data-href="${i}">${i
+                            }</a></li>`;
+                    }
+                }
+            }
+            if (page < total_page)
+                html_paging += `<li onclick="${func_name}(${page + 1
+                    })"><a class="nb-txt nb-hover font-weight-bold page-current" href="#">»</a></li>`;
+            else
+                html_paging += `<li><a class="nb-txt nb-hover font-weight-bold page-current">»</a></li>`;
+            html_paging += `</ul></div>`;
+            $('#paging').html(html_paging);
+        }
+
+        let id = '@ViewBag.id';
+        function taiKhoanPre() {
+            $.ajax
+            ({
+                type: 'POST',
+                url: '@Url.Action("getTaiKhoanByIdCuocThi", "DanhSachThi")',
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    data.data.forEach(x => {
+                        let input =
+                            `<input class='form-control d-none' readonly name='list_tai_khoan_need' value='${x
+                                .ten_tai_khoan}'>`;
+                        //let btn_close = `<button class='btn btn-danger float-right removeThis'>x</button>`;
+                        let row =
+                            `<li class='list-group-item' id="item_${x.ten_tai_khoan}">${input} ${x.fullname} (${x
+                                .ten_tai_khoan
+                                }) </li>`;
+                        $("ul.list_account_checked").append(row);
+                        $('.removeThis').click(function() {
+                            $(this).parent().remove();
+                        });
+                    });
+
+                },
+                error: function(ex) {
+                    alert("Message: " + ex);
+                }
+            });
+        }
+    </script>
+}

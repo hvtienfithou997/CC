@@ -1,0 +1,119 @@
+﻿@{
+    var pageNumber = ViewBag.Page as int? ?? 1;
+    var pageSize = ViewBag.PageSize as int?;
+    var totalItem = ViewBag.Total as int? ?? ViewBag.Total;
+    var totalPage = (int)Math.Ceiling((decimal)((double)totalItem / pageSize));
+    var ngay_thi_tu = Model.ngay_thi_tu;
+    var ngay_thi_den = Model.ngay_thi_den;
+    var term = Model.term;
+    var id_cuoc_thi = Model.id_cuoc_thi;
+    var action = ViewContext.RouteData.Values["action"].ToString();
+    action = action == "MyExam" ? "MyExam" : action;
+}
+
+@if (pageNumber <= totalPage)
+{
+    var ext_space = false;
+    <div class="pagin">
+
+        <ul class="number-page">
+
+            @if (pageNumber > 1)
+            {
+                <li>
+                    <a href="@Url.Action($"{action}", new {id_cuoc_thi = id_cuoc_thi,term = term, page = pageNumber - 1, ngay_thi_tu = @ngay_thi_tu, ngay_thi_den = @ngay_thi_den})" class="icon-pre">
+                        <i class="fal fa-angle-left">Trước</i>
+                    </a>
+                </li>
+            }
+
+            @if (totalPage > 4)
+            {
+                if (pageNumber - 1 > 0)
+                {
+                    <li>
+                        <a href="@Url.Action($"{action}", new {id_cuoc_thi = id_cuoc_thi, term = term,page = pageNumber - 1, ngay_thi_tu = @ngay_thi_tu, ngay_thi_den = ngay_thi_den})" title="" class="nb-txt nb-hover ">@(pageNumber - 1)</a>
+                    </li>
+                }
+                @for (int i = 1; i <= totalPage; i++)
+                {
+                    if (i > 2 && i < totalPage - 1)
+                    {
+                        if (!ext_space)
+                        {
+                            ext_space = true;
+                            <li><span title="" class="nb-txt nb-hover font-weight-bold page-current">@pageNumber</span></li>
+                            if (pageNumber < totalPage)
+                            {
+                                <li>
+                                    <a href="@Url.Action($"{action}", new {id_cuoc_thi = id_cuoc_thi, term = term,page = pageNumber + 1, ngay_thi_tu = @ngay_thi_tu, ngay_thi_den = ngay_thi_den})" title="" class="nb-txt nb-hover ">@(pageNumber + 1)</a>
+                                </li>
+                            }
+                            <li>
+                                <b  class="">/ @totalPage &nbsp;</b>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        if (pageNumber == i)
+                        {
+                            //<li><span title="" class="nb-txt nb-hover font-weight-bold page-current">@i</span></li>
+                        }
+                        else
+                        {
+                            @*if (i > 2 && i <= totalPage - 1)
+                            {
+                                <li>
+                                    <a href="@Url.Action($"{action}", new {id_cuoc_thi = id_cuoc_thi, term = term,page = i, ngay_thi_tu = @ngay_thi_tu, ngay_thi_den = ngay_thi_den})" title="" class="nb-txt nb-hover ">@i</a>
+                                </li>
+                            }*@
+                            
+                        }
+                    }
+                }
+            }
+            else
+            {
+                @for (int i = 1; i <= totalPage; i++)
+                {
+                    if (i > 2 && i < totalPage - 1)
+                    {
+                        if (!ext_space)
+                        {
+                            ext_space = true;
+
+                            <li><span>...</span></li>
+                        }
+                    }
+                    else
+                    {
+                        if (pageNumber == i)
+                        {
+                            <li><span title="" class="nb-txt nb-hover font-weight-bold page-current">@i</span></li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="@Url.Action($"{action}", new {id_cuoc_thi = id_cuoc_thi, term = term,page = i, ngay_thi_tu = @ngay_thi_tu, ngay_thi_den = ngay_thi_den})" title="" class="nb-txt nb-hover ">@i</a>
+                            </li>
+                        }
+                    }
+                }
+            }
+
+
+
+
+            @if (pageNumber < totalPage)
+            {
+                <li>
+                    <a href="@Url.Action($"{action}", new {id_cuoc_thi = id_cuoc_thi, term = term, page = pageNumber + 1, ngay_thi_tu = @ngay_thi_tu, ngay_thi_den = ngay_thi_den})" class="icon-pre">
+                        <i class="fal fa-angle-right">Tiếp</i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+}

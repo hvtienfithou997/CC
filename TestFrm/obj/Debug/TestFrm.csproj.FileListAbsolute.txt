@@ -1,0 +1,9 @@
+F:\ThiChungChi\TestFrm\bin\Debug\TestFrm.exe.config
+F:\ThiChungChi\TestFrm\bin\Debug\TestFrm.exe
+F:\ThiChungChi\TestFrm\bin\Debug\TestFrm.pdb
+F:\ThiChungChi\TestFrm\obj\Debug\TestFrm.csprojAssemblyReference.cache
+F:\ThiChungChi\TestFrm\obj\Debug\TestFrm.Properties.Resources.resources
+F:\ThiChungChi\TestFrm\obj\Debug\TestFrm.csproj.GenerateResource.cache
+F:\ThiChungChi\TestFrm\obj\Debug\TestFrm.csproj.CoreCompileInputs.cache
+F:\ThiChungChi\TestFrm\obj\Debug\TestFrm.exe
+F:\ThiChungChi\TestFrm\obj\Debug\TestFrm.pdb

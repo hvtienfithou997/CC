@@ -1,0 +1,95 @@
+﻿@{
+    var pageNumber = ViewBag.Page as int? ?? 1;
+    var pageSize = ViewBag.PageSize as int?;
+    var totalItem = ViewBag.Total as int? ?? ViewBag.Total;
+    var totalPage = (int)Math.Ceiling((decimal)((double)totalItem / pageSize));
+    var loai = Model.loai as int? ?? 0;
+    var term = Model.term;
+
+}
+
+@if (pageNumber <= totalPage)
+{
+    var ext_space = false;
+    <div class="pagin">
+
+        <ul class="number-page">
+
+            @if (pageNumber > 1)
+            {
+                <li>
+                    <a href="@Url.Action("Index", new {term = term, page = pageNumber - 1, loai = @loai})" class="icon-pre">
+                        <i class="fal fa-angle-left">Trước</i>
+                    </a>
+                </li>
+            }
+
+            @if (totalPage > 4)
+            {
+                if (pageNumber - 1 > 0)
+                {
+                    <li>
+                        <a href="@Url.Action("Index", new {term = term,page = pageNumber - 1, loai = @loai})" title="" class="nb-txt nb-hover ">@(pageNumber - 1)</a>
+                    </li>
+                }
+                @for (int i = 1; i <= totalPage; i++)
+                {
+                    if (i > 2 && i < totalPage - 1)
+                    {
+                        if (!ext_space)
+                        {
+                            ext_space = true;
+                            <li><span title="" class="nb-txt nb-hover font-weight-bold page-current">@pageNumber</span></li>
+                            if (pageNumber < totalPage)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", new {term = term,page = pageNumber + 1, loai = @loai})" title="" class="nb-txt nb-hover ">@(pageNumber + 1)</a>
+                                </li>
+                            }
+                            <li>
+                                <b class="">/ @totalPage &nbsp;</b>
+                            </li>
+                        }
+                    }
+                }
+            }
+            else
+            {
+                @for (int i = 1; i <= totalPage; i++)
+                {
+                    if (i > 2 && i < totalPage - 1)
+                    {
+                        if (!ext_space)
+                        {
+                            ext_space = true;
+                            <li><span>...</span></li>
+                        }
+                    }
+                    else
+                    {
+                        if (pageNumber == i)
+                        {
+                            <li><span title="" class="nb-txt nb-hover font-weight-bold page-current">@i</span></li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", new {term = term,page = i, loai = @loai})" title="" class="nb-txt nb-hover ">@i</a>
+                            </li>
+                        }
+                    }
+                }
+            }
+
+            @if (pageNumber < totalPage)
+            {
+                <li>
+                    <a href="@Url.Action("Index", new {term = term, page = pageNumber + 1, loai = @loai})" class="icon-pre">
+                        <i class="fal fa-angle-right">Tiếp</i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+}

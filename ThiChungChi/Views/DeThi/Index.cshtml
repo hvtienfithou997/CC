@@ -1,0 +1,116 @@
+﻿@using ThiChungChiModels
+@model IEnumerable<ThiChungChiModels.DeThiTyping>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalItem = ViewBag.Total;
+}
+
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h1>Danh sách đề thi </h1>
+    </div>
+    <div class="col-md-6 text-right">
+        <p>
+            @if (User.IsInRole(((int)(Role.ADMIN)).ToString()))
+            {
+                <a class="btn btn-dark" asp-action="Create">Tạo mới</a>
+            }
+        </p>
+    </div>
+</div>
+
+<form asp-action="Index">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <input placeholder="Tìm kiếm cuộc thi" name="term" value="@Html.Raw(System.Web.HttpUtility.HtmlDecode(ViewBag.Term))" class="form-control" />
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <button id="btn_search" class="btn-size btn btn-primary">Tìm</button>
+        </div>
+
+        <div class="col-sm-12" id="box_thuoc_tinh">
+            @Html.Raw(ViewBag.thuoc_tinh_search)
+        </div>
+    </div>
+</form>
+
+<p>Tổng số: @totalItem</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ten)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nguoi_tao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nguoi_sua)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ten)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nguoi_tao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nguoi_sua)
+            </td>
+            <td>
+                @Html.ActionLink("Sửa", "Edit", new { id = item.id })
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_rec_modal_@item.id">
+                    Xóa
+                </button>
+                <div class="modal fade" id="delete_rec_modal_@item.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <form asp-action="Delete" method="get" asp-route-id="@item.id">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-warning" id="exampleModalLabel">Thông báo</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn có chắc chắn muốn xóa đề thi: <kbd>@item.ten</kbd>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                    <button type="submit" class="btn btn-primary">Đồng ý</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var term = ViewBag.Term as string;
+    var loai = 0;
+    Html.RenderPartial("Paging", new { loai, term });
+}

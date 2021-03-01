@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="d-none">
+    <form asp-action="Index">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Từ gõ</label>
+                    <textarea name="word" value="" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label> Tên đề</label>
+                    <input type="text" name="ten" value="" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <label>Thời gian</label>
+                <input type="number" name="time" value="" />
+            </div>
+            <div class="col-sm-2">
+                <button id="btn_search" class="btn-size btn btn-primary">Thêm</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="text-center">
+    <h2>Thi chứng chỉ</h2>
+</div>

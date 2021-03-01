@@ -1,0 +1,13 @@
+F:\ThiChungChi\ThiChungChiES\bin\Debug\netstandard2.0\ThiChungChiES.deps.json
+F:\ThiChungChi\ThiChungChiES\bin\Debug\netstandard2.0\ThiChungChiES.dll
+F:\ThiChungChi\ThiChungChiES\bin\Debug\netstandard2.0\ThiChungChiES.pdb
+F:\ThiChungChi\ThiChungChiES\bin\Debug\netstandard2.0\ThiChungChiModels.dll
+F:\ThiChungChi\ThiChungChiES\bin\Debug\netstandard2.0\XUtil.dll
+F:\ThiChungChi\ThiChungChiES\bin\Debug\netstandard2.0\ThiChungChiModels.pdb
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.csprojAssemblyReference.cache
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.AssemblyInfoInputs.cache
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.AssemblyInfo.cs
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.csproj.CoreCompileInputs.cache
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.csproj.CopyComplete
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.dll
+F:\ThiChungChi\ThiChungChiES\obj\Debug\netstandard2.0\ThiChungChiES.pdb

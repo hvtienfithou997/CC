@@ -1,0 +1,109 @@
+﻿@using ThiChungChiModels
+@model ThiChungChiModels.TaiKhoanChungChi
+
+@{
+    ViewData["Title"] = "Tài khoản chứng chỉ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .center_label{
+        text-align: center;
+    }
+</style>
+
+@if (Model != null)
+{
+    <div class="row">
+        <hr />
+        <div class="col-md-10">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    Cuộc thi
+                </dt>
+                <dd class="col-sm-6">
+                    @ViewBag.ten_cuoc_thi
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.id_tai_khoan)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.id_tai_khoan) (@ViewBag.fullname)
+                </dd>
+                <dt class="col-sm-4">
+                    Ngày thi
+                </dt>
+                <dd class="col-sm-8">
+                    @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_cap)
+                </dd>
+                <dt class="col-sm-4">
+                    Điểm thi
+                </dt>
+                <dd class="col-sm-8">
+                    @ViewBag.diem_thi
+                </dd>
+            </dl>
+        </div>
+        
+        <div class="col-md-2">
+            <a class="btn btn-info" target="_blank" href="@Url.Action("ViewCC","TaiKhoanChungChi", new {id = Model.id_ket_qua_thi})">
+                Xem chứng chỉ online
+            </a>
+        </div>
+
+        <div class="col-md-12">
+            <form asp-action="TaiKhoanChungChi">
+                <input asp-for="ngay_cap" id="ngay_cap" name="ngay_cap" value="@Model.ngay_cap" class="form-control d-none" />
+                <input asp-for="ngay_tao" id="ngay_tao" name="ngay_tao" value="@Model.ngay_tao" class="form-control d-none" />
+                <input asp-for="id_tai_khoan" id="id_tai_khoan" name="id_tai_khoan" value="@Model.id_tai_khoan" class="form-control d-none" />
+                
+                    <div class="form-group center_label">
+                        <label asp-for="noi_dung" class="control-label text-center"><b>Chứng chỉ Online</b></label>
+                        <div id="noi_dung" name="noi_dung" style="background:#ccc;margin:10px auto;padding:10px;overflow:hidden">@Html.Raw(Model.noi_dung)</div>
+                    </div>
+                
+                <div class="form-group">
+                    <label asp-for="dia_chi_nhan_offline" class="control-label"></label>
+                    <textarea id="dia_chi_nhan_offline" name="dia_chi_nhan_offline" class="form-control">@Model.dia_chi_nhan_offline</textarea>
+                </div>
+
+                @*<div class="form-group">
+            <label asp-for="ngay_gui_offline" class="control-label"></label>
+            <input name="gui_offline" autocomplete="off" value="@XMedia.XUtil.EpochToTimeString(Model.ngay_gui_offline, "dd/MM/yyyy")" class="form-control datepicker" />
+            <input id="ngay_gui_offline" name="ngay_gui_offline" value="@Model.ngay_gui_offline" class="form-control d-none" />
+        </div>*@
+                <div class="form-group">
+                    <input type="submit" value="Lưu" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('[name="gui_offline"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function() {
+                try {
+                    $('[name="gui_offline"]').datepicker('setEndDate', $('[name="gui_offline"]').val());
+                } catch (e) {
+
+                }
+            }).on('hide',
+            function(e) {
+                if (e.dates.length > 0) {
+                    $("#ngay_gui_offline").val(e.date.getTime() / 1000);
+                }else {
+                    $("#ngay_gui_offline").val(0);
+                }
+            });
+    </script>
+}

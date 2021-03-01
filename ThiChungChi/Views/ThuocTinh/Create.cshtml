@@ -1,0 +1,73 @@
+﻿@using ThiChungChiModels
+@model ThiChungChiModels.ThuocTinh
+
+@{
+    ViewData["Title"] = "Tạo mới thuộc tính";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Tạo mới thuộc tính</h1>
+<hr />
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ten" class="control-label"></label>
+                <input asp-for="ten" class="form-control" />
+                <span asp-validation-for="ten" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="loai" class="control-label"></label>
+                <select class="form-control" asp-for="loai" asp-items="Html.GetEnumSelectList<LoaiThuocTinh>()">
+                    <option selected="selected" value="-1">---Thuộc tính---</option>
+                </select>
+                <span asp-validation-for="loai" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="gia_tri" class="control-label"></label>
+                <input asp-for="gia_tri" class="form-control" />
+                <span asp-validation-for="gia_tri" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="nhom" class="control-label"></label>
+                <input asp-for="nhom" class="form-control" />
+                <span asp-validation-for="nhom" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <select class="form-control" asp-for="type" asp-items="Html.GetEnumSelectList<ThuocTinhType>()">
+                    <option selected="selected" value="">---Loại thuộc tính---</option>
+                </select>
+                <span asp-validation-for="type" class="text-danger"></span>
+            </div>*@
+            @*<div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="is_system" /> @Html.DisplayNameFor(model => model.is_system)
+                </label>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    let msg = '@TempData["Message"]';
+</script>

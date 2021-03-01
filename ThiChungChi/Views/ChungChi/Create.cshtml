@@ -1,0 +1,98 @@
+﻿@model ThiChungChiModels.ChungChi
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Tạo chứng chỉ</h1>
+
+<hr />
+
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="form-group">
+                <label asp-for="ten" class="control-label"></label>
+                <input asp-for="ten" class="form-control" />
+                <span asp-validation-for="ten" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="noi_dung" class="control-label"></label>
+                <textarea asp-for="noi_dung" rows="10" class="form-control"></textarea>
+                <span asp-validation-for="noi_dung" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Từ khóa</th>
+                        <th scope="col">Ý nghĩa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td><kbd>[TEN]</kbd></td>
+                        <td>Tên của ứng viên</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td><kbd>[CUOCTHI]</kbd></td>
+                        <td>Tên của cuộc thi</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td><kbd>[NGAYCAP]</kbd></td>
+                        <td>Ngày cấp chứng chỉ </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td><kbd>[DIEMTHI]</kbd></td>
+                        <td>Điểm thi của ứng viên</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td><kbd>[HANG]</kbd></td>
+                        <td>Đạt hạng (danh hiệu)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+            CKEDITOR.replace('noi_dung');
+
+            $("kbd").css("cursor", "pointer").click(function () {
+                appendText($(this).text());
+            });
+
+            function appendText(text) {
+                //var noi_dung = $('#noi_dung').val();
+                var noi_dung = CKEDITOR.instances['noi_dung'].getData();
+                    //CKEDITOR.instances['noi_dung'].getData();
+                var value = CKEDITOR.instances['noi_dung'].setData(noi_dung + text);
+                $('#noi_dung').val(value + text);
+            }
+        })
+    </script>
+
+}

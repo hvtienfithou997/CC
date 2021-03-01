@@ -1,0 +1,89 @@
+﻿@using ThiChungChiModels
+@model IEnumerable<ThiChungChiModels.TaiKhoan>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalItem = ViewBag.Total;
+}
+
+<h1>Danh sách tài khoản</h1>
+@if (User.IsInRole(((int)(Role.ADMIN)).ToString()))
+{
+    <p>
+        <a asp-action="Create">Tạo mới</a>
+    </p>
+}
+@if (User.IsInRole(((int)(Role.ADMIN)).ToString()))
+{
+    <p>Tổng số: @totalItem</p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fullname)
+            </th>
+            <th>Quyền</th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dang_nhap_cuoi)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fullname)
+            </td>
+            <td>
+                @{
+                    if (item.role == 0)
+                    {
+                        @("User")
+                    }
+                    else if(item.role == 2)
+                    {
+                        @("Create")
+                    }
+                    else
+                    {
+                       <b>@("Admin")</b>
+                    }
+                    //@Html.DisplayFor(modelItem => item.role)
+                }
+                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+            <td>
+                @XMedia.XUtil.EpochToTimeStringShortFomart(item.dang_nhap_cuoi)
+            </td>
+            <td>
+                @Html.ActionLink("Sửa", "Edit", new { id = item.id })
+                @*@Html.ActionLink("Chi tiết", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Xóa", "Delete", new { id=item.id  })*@
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var term = ViewBag.Term as string;
+    var loai = 0;
+    Html.RenderPartial("Paging", new { loai, term });
+}

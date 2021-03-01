@@ -1,0 +1,294 @@
+﻿    @using ThiChungChiModels
+@model IEnumerable<ThiChungChi.Models.DanhSachThiMap>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var totalItem = ViewBag.Total;
+    var d = ViewBag.ngay_thi_tu > 0 ? ViewBag.ngay_thi_tu : 0;
+    var dt = ViewBag.ngay_thi_den > 0 ? ViewBag.ngay_thi_den : 0;
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h1>Danh sách thi </h1>
+    </div>
+    <div class="col-md-6 text-right">
+        <p>
+            <a class="btn btn-dark" asp-action="Create">Tạo mới</a> <a class="btn btn-success d-none" href="@Url.Action("MyExam","DanhSachThi", new{ user = ViewBag.user})">Cuộc thi của tôi</a>
+        </p>
+    </div>
+</div>
+
+    <form asp-action="Index">
+        <div class="row">
+            <div class="col-sm-4">
+                @if (ViewBag.cuoc_thi != null)
+                {
+                    <div class="form-group">
+                        @Html.DropDownList("id_cuoc_thi",
+                            (List<SelectListItem>)ViewBag.cuoc_thi, "--- Chọn cuộc thi ---", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                }
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <input placeholder="Tìm kiếm" name="term" value="@Html.Raw(System.Web.HttpUtility.HtmlDecode(ViewBag.Term))" class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <input placeholder="Ngày bắt đầu" name="ngay_tu" autocomplete="off" value="@XMedia.XUtil.EpochToTimeString(d, "dd/MM/yyyy")" class="form-control datepicker" />
+                    <input placeholder="Ngày bắt đầu" id="ngay_thi_tu" name="ngay_thi_tu" value="@d" class="form-control d-none" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <input placeholder="Ngày kết thúc" name="ngay_den" autocomplete="off" value="@XMedia.XUtil.EpochToTimeString(dt, "dd/MM/yyyy")" class="form-control datepicker" />
+                    <input placeholder="Ngày kết thúc" id="ngay_thi_den" name="ngay_thi_den" value="@dt" class="form-control d-none" />
+                </div>
+            </div>
+
+            <div class="col-sm-1 text-right">
+                <button id="btn_search" class="btn btn-primary">Tìm</button>
+            </div>
+
+            <div class="col-sm-12">
+                @Html.Raw(ViewBag.thuoc_tinh_search)
+            </div>
+        </div>
+    </form>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>Tổng số: @totalItem</p>
+    </div>
+    @*<div class="col-md-6 text-right">
+            <a class="btn btn-success" href="@Url.Action("MyExam","DanhSachThi", new{ user = ViewBag.user})">Cuộc thi của tôi</a>
+        </div>*@
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.ten_cuoc_thi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ten_tai_khoan)
+            </th>
+            @*<th>Thuộc tính</th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.ngay_bat_dau) <br> @Html.DisplayNameFor(model => model.ngay_ket_thuc)
+        </th>
+            
+            <th></th>
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int count = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ten_cuoc_thi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ten_tai_khoan)<br />
+                        (@Html.DisplayFor(modelItem => item.fullname))
+                    </td>
+                    @*<td>
+                            @if (item.thuoc_tinh != null)
+                            {
+                                foreach (var lst in item.thuoc_tinh)
+                                {
+                                    <p>-- @lst.Value</p>
+                                }
+                            }
+                        </td>*@
+                <td>
+                    @XMedia.XUtil.EpochToTimeString(item.ngay_bat_dau, "dd/MM/yyyy") <br> @XMedia.XUtil.EpochToTimeString(item.ngay_ket_thuc, "dd/MM/yyyy")
+                </td>
+                    
+                    <td>
+                        @if (User.IsInRole(((int)Role.ADMIN).ToString()))
+                        {
+                            @Html.ActionLink("Sửa", "Edit", new { id = item.id })
+                            <span>|</span>
+                        }
+
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.id })
+
+                        @if (User.IsInRole(((int)Role.ADMIN).ToString()))
+                        {
+                            <span>|</span>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_rec_modal_@item.id">
+                                Xóa
+                            </button>
+                        }
+
+                        <div class="modal fade" id="delete_rec_modal_@item.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <form asp-action="Delete" method="get" asp-route-id="@item.id">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-warning text-bold" id="exampleModalLabel">Thông báo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa tài khoản <kbd>@item.ten_tai_khoan</kbd> trong cuộc thi <kbd>@item.ten_cuoc_thi</kbd> không?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                            <button type="submit" class="btn btn-primary">Đồng ý</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                    <!--<td>
+                        <button class="btn btn-primary" data-toggle="modal" id="@item.id" onclick="showThuocTinhDsThi(this.id)" data-target="#thuoc_tinh_ds_thi">Đánh dấu</button>-->
+                    @*<button class="btn btn-primary" data-toggle="modal" id="@(item.id_cuoc_thi)_-_@(item.id_tai_khoan)" onclick="showPassword(this.id)" data-target="#mat_khau">Thi</button>*@
+                    <!--</td>-->
+                </tr>
+                
+            }
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="thuoc_tinh_ds_thi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="LuuChungChi">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Đánh dấu danh sách thi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="cuoc_thi">
+                    <input type="hidden" class="form-control" id="id_obj" name="id_obj" value="" />
+                    @Html.Raw(ViewBag.thuoc_tinh)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="mat_khau" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="exam" asp-controller="Typing">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="title_mat_khau">Nhập mật khẩu cuộc thi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="cuoc_thi">
+                    <input type="text" hidden="hidden" class="form-control" name="cuoc_thi" value="" />
+                    <input type="text" hidden="hidden" class="form-control" name="tai_khoan" value="" />
+                    <input type="text" class="form-control" id="pass_thi" name="pass_thi" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@{
+    try
+    {
+        var term = ViewBag.Term as string;
+        var id_cuoc_thi = ViewBag.id_cuoc_thi as string;
+        // XMedia.XUtil.EpochToTimeString(d, "dd-MM-yyyy"); // XMedia.XUtil.EpochToTimeString(dt, "dd-MM-yyyy");
+        var ngay_thi_tu = d;
+        var ngay_thi_den = dt;
+        Html.RenderPartial("PagingWithDate", new { ngay_thi_tu, ngay_thi_den, term, id_cuoc_thi });
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+    }
+
+}
+
+@section scripts {
+    <script>
+
+        $('[name="ngay_tu"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function () {
+                try {
+                    $('[name="ngay_tu"]').datepicker('setEndDate', $('[name="ngay_den"]').val());
+                } catch (e) {
+
+                }
+            }).on('hide',
+                function (e) {
+                    if (e.dates.length > 0) {
+                        $("#ngay_thi_tu").val(e.date.getTime() / 1000);
+                    }else {
+                        $("#ngay_thi_tu").val(0);
+                    }
+
+                });
+        $('[name="ngay_den"]').datepicker({
+            format: 'dd/mm/yyyy'
+        }).on('show',
+            function () {
+                try {
+                    $('[name="ngay_den"]').datepicker('setStartDate', $('[name="ngay_tu"]').val());
+                } catch (e) {
+
+                }
+
+            }).on('hide',
+                function (e) {
+                    if (e.dates.length > 0) {
+                        $("#ngay_thi_den").val(e.date.getTime() / 1000);
+                    }else {
+                        $("#ngay_thi_den").val(0);
+                    }
+                });
+
+        function showThuocTinhDsThi(id_obj) {
+            $("#id_obj").val(id_obj);
+        }
+
+        function showPassword(id) {
+            $("input[name='cuoc_thi']").val("");
+            $("input[name='tai_khoan']").val("");
+            $("input[name='pass_thi']").val("");
+            let arr = id.split("_-_");
+            $("input[name='cuoc_thi']").val(arr[0]);
+            $("input[name='tai_khoan']").val(arr[1]);
+        }
+        $(document).ready(function() {
+            var array = @Html.Raw(Json.Serialize(ViewBag.tt));
+            for (var i = 0; i < array.length; i++) {
+                $(`input[name^='thuoc_tinh'][value='${array[i]}']`).prop('checked', true);
+            }
+
+        });
+    </script>
+}

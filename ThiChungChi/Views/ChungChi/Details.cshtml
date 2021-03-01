@@ -1,0 +1,72 @@
+﻿@model ThiChungChi.Models.CCMap;
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chi tiết chứng chỉ</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ten)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ten)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.noi_dung)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.noi_dung)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.mau_chung_chi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.mau_chung_chi)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.thuoc_tinh)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.thuoc_tinh != null)
+            {
+                foreach (var lst in Model.thuoc_tinh)
+                {
+                    <p>-- @lst.Value</p>
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_tao)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_tao)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ngay_sua)
+        </dt>
+        <dd class="col-sm-10">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_sua)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.nguoi_tao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.nguoi_tao)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.nguoi_sua)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.nguoi_sua)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>

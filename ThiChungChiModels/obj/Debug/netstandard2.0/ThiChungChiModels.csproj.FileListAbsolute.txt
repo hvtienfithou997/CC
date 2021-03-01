@@ -1,0 +1,11 @@
+F:\ThiChungChi\ThiChungChiModels\bin\Debug\netstandard2.0\ThiChungChiModels.deps.json
+F:\ThiChungChi\ThiChungChiModels\bin\Debug\netstandard2.0\ThiChungChiModels.dll
+F:\ThiChungChi\ThiChungChiModels\bin\Debug\netstandard2.0\ThiChungChiModels.pdb
+F:\ThiChungChi\ThiChungChiModels\bin\Debug\netstandard2.0\XUtil.dll
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.csprojAssemblyReference.cache
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.AssemblyInfoInputs.cache
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.AssemblyInfo.cs
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.csproj.CoreCompileInputs.cache
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.csproj.CopyComplete
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.dll
+F:\ThiChungChi\ThiChungChiModels\obj\Debug\netstandard2.0\ThiChungChiModels.pdb

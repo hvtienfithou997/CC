@@ -1,0 +1,78 @@
+﻿@model IEnumerable<ThiChungChiModels.TaiKhoanChungChi>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_tai_khoan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_chung_chi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_ket_qua_thi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ngay_cap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.noi_dung)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dia_chi_nhan_offline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ngay_gui_offline)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id_tai_khoan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id_chung_chi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id_ket_qua_thi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ngay_cap)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.noi_dung)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.dia_chi_nhan_offline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ngay_gui_offline)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Sửa", "Edit", new { id = item.id }) |
+                        @*@Html.ActionLink("Chi tiết", "Details", new { id = item.id }) |
+                        @Html.ActionLink("Xóa", "Delete", new { id = item.id })*@
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,79 @@
+﻿@model ThiChungChiModels.ThuocTinh
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.loai)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.loai)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.gia_tri)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.gia_tri)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.ten)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.ten)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.nhom)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.nhom)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.type)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.type)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.is_system)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.is_system)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.ngay_tao)
+        </dt>
+        <dd class="col-sm-8">
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_tao)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.ngay_sua)
+        </dt>
+        <dd class="col-sm-8">
+
+            @XMedia.XUtil.EpochToTimeStringShortFomart(Model.ngay_sua)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.nguoi_tao)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.nguoi_tao)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.nguoi_sua)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.nguoi_sua)
+        </dd>
+    </dl>
+</div>
+<div>
+    @*@Html.ActionLink("Sửa", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
+    <a asp-action="Index">Quay lại</a>
+</div>
